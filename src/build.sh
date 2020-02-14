@@ -2,6 +2,4 @@
 
 echo "Compiling..."
 
-rm ../build/*
-
-g++ -std=c++17 ./curses_roguelike.cpp -o ../build/roguelike -lncurses
+g++ -std=c++17 ./curses_roguelike.cpp ./cr_color.cpp -o ../build/roguelike -lncursesw
