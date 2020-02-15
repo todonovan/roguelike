@@ -1,19 +1,25 @@
 #include "roguelike.h"
 
-vec_2 AddVectors(vec_2 V1, vec_2 V2)
+struct vec_2
 {
-    vec_2 Result;
-    Result.X = V1.X + V2.X;
-    Result.Y = V1.Y + V2.Y;
+    int x;
+    int y;
+};
 
-    return Result;
+vec_2 add_vectors(vec_2 v1, vec_2 v2)
+{
+    vec_2 result;
+    result.x = v1.x + v2.x;
+    result.y = v1.y + v2.y;
+
+    return result;
 }
 
-vec_2 ScaleVector(vec_2 V, float S)
+vec_2 scale_vector(vec_2 v, float s)
 {
-    vec_2 Result;
-    Result.X = V.X * S;
-    Result.Y = V.Y * S;
+    vec_2 result;
+    result.x = v.x * s;
+    result.y = v.y * s;
 
-    return Result;
+    return result;
 }

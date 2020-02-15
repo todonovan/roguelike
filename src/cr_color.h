@@ -1,10 +1,10 @@
 #pragma once
 
-#include <stdint.h>
-#include <stdlib.h>
-#include <ncurses.h>
+#include "cr_common.h"
+#include "cr_glyph.h"
 
-#include "ncurses.h"
+// This absolutely dirty macro will make color pair lookups easier... eesh..
+#define MAKE_COLOR_PAIR(fg, bg) fg ## _ON_ ## bg
 
 // ncurses6 supports up to 256 colors; we obviously won't use that many (probably)
 // The enum starts at 16 to avoid overwriting the system defaults.
@@ -19,11 +19,22 @@ typedef enum
     INDIGO,
     VIOLET,
     WHITE,
-} CRColorCode;
+    LIGHTER_GRAY,
+    LIGHT_GRAY,
+    GRAY,
+    DARK_GRAY,
+    DARKER_GRAY,
+    BEIGE,
+    TAN,
+    BROWN,
+    DARK_BROWN,
+    AZURE,
+    BLUEBERRY,
+} CRColor;
 
-// ncurses colors work in color pairs; you define both a fg color and a bg color
-// ncurses6 with ext colors supports up to 256 color pairs
-// ncurses expect bg first, then fg; here, they're named in reverse order because it sounds better
+// Ncurses colors work in color pairs; you define both a fg color and a bg color.
+// I used to think only 256 color pairs were supported, but actually it's 65536... 
+// Should these pairs, or colors generally, be customizable by the user? If so, how?? 
 typedef enum
 {
     WHITE_ON_BLACK = 16,
@@ -34,6 +45,30 @@ typedef enum
     BLUE_ON_BLACK,
     INDIGO_ON_BLACK,
     VIOLET_ON_BLACK,
+    LIGHTER_GRAY_ON_BLACK,
+    LIGHT_GRAY_ON_BLACK,
+    GRAY_ON_BLACK,
+    DARK_GRAY_ON_BLACK,
+    DARKER_GRAY_ON_BLACK,
+    BEIGE_ON_BLACK,
+    TAN_ON_BLACK,
+    BROWN_ON_BLACK,
+    DARK_BROWN_ON_BLACK,
+    AZURE_ON_BLACK,
+    BLUEBERRY_ON_BLACK,
+
+    WHITE_ON_BLUEBERRY,
+    BLACK_ON_BLUEBERRY,
+    GRAY_ON_BLUEBERRY,
+    YELLOW_ON_BLUEBERRY,
+    
+    WHITE_ON_BLUE,
+    BLACK_ON_BLUE,
+    GRAY_ON_BLUE,
+    YELLOW_ON_BLUE,
+
+    WHITE_ON_GRAY,
+
     WHITE_ON_RED,
     ORANGE_ON_RED,
     YELLOW_ON_RED,
@@ -42,16 +77,17 @@ typedef enum
     INDIGO_ON_RED,
     VIOLET_ON_RED,
     BLACK_ON_RED,
-} CRColorPairCode;
+} CRColorPair;
 
 // In ncurses, values are represented by a short from 0 -> 1000
 struct CRColorTriple
 {
-    CRColorCode code;
+    CRColor code;
     int16_t red;
     int16_t blue;
     int16_t green;
 };
 
-void cr_init_colors();
+CRResultCode cr_init_colors();
 void cr_end_color();
+CRColorPair cr_color_pair_from_glyph(CRGlyph glyph);
