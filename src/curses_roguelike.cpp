@@ -42,7 +42,7 @@ struct GameState
     Entity player;
     ECSWorld world;
     Map map;
-}
+};
 
 void init_ncurses()
 {
@@ -67,9 +67,16 @@ void end_ncurses()
     endwin();
 }
 
+void init_game_state(GameState *state)
+{
+
+}
+
 int main(int argc, char *argv[])
 {
     init_ncurses();
+    GameState *game_state = (GameState *)malloc(sizeof(GameState));
+    init_game_state(game_state);
     
     getch();
     end_ncurses();

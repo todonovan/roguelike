@@ -16,3 +16,5 @@ struct CRGlyph
     CRColor default_bg;
     CRColorPair default_color_pair;
 };
+
+// **TO DO** -- load these automatically from file 
