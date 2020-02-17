@@ -10,11 +10,14 @@ typedef unsigned long long ulonger;
 
 struct ECSWorld
 {
-    Entity entities[MAX_ENTITIES];
-    Position positions[MAX_ENTITIES];
-    Velocity velocities[MAX_ENTITIES];
-    Renderable renderables[MAX_ENTITIES];
+    Entity *entities;
+    bool *is_free;
+    Position *positions;
+    Velocity *velocities;
+    Renderable *renderables;
 };
 
-Entity create_entity(ECSWorld *world);
-void init_world(ECSWorld *world);
+Entity ecs_create_entity(ECSWorld *world);
+void ecs_kill_entity(ECSWorld *world, Entity entity);
+void ecs_init_world(ECSWorld *world);
+void ecs_free_world(ECSWorld *world);

@@ -1,3 +1,5 @@
+#pragma once
+
 #include "cr_common.h"
 #include "cr_color.h"
 

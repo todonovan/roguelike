@@ -28,20 +28,22 @@
 #include "cr_color.h"
 #include "map.h"
 #include "ecs/ecs.h"
+#include "player.h"
 
 typedef enum
 {
     MOVEMENT,
     INVENTORY,
     LOOK,
+    START_MENU,
 } GameMode;
 
 struct GameState
 {
     GameMode mode;
     Entity player;
-    ECSWorld world;
-    Map map;
+    ECSWorld *world;
+    Map *map;
 };
 
 void init_ncurses()
@@ -69,14 +71,22 @@ void end_ncurses()
 
 void init_game_state(GameState *state)
 {
+    state->mode = GameMode::START_MENU;
+    
+    state->world = (ECSWorld *)malloc(sizeof(ECSWorld));
+    ecs_init_world(state->world);
+    
+    state->player = create_player(state->world);
 
+    state->map
 }
 
 int main(int argc, char *argv[])
 {
     init_ncurses();
-    GameState *game_state = (GameState *)malloc(sizeof(GameState));
-    init_game_state(game_state);
+    GameState game_state = {};
+    init_game_state(&game_state);
+
     
     getch();
     end_ncurses();
