@@ -4,9 +4,9 @@
 #include "ecs_component.h"
 #include "../cr_glyph.h"
 
-Entity create_entity(ECSWorld *world)
+Entity ecs_create_entity(ECSWorld *world)
 {
-    for (Entity i = 0; i < MAX_ENTITIES; i++)
+    for (int i = 0; i < MAX_ENTITIES; i++)
     {
         if (world->is_free[i])
         {

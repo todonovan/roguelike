@@ -8,6 +8,8 @@ struct Tile
 {
     TileType type;
     CRGlyph glyph;
+    bool BlocksMovement;
+    bool IsOccupied;
 };
 
 struct Map

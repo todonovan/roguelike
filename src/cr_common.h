@@ -2,6 +2,7 @@
 
 #include <stdlib.h>
 #include <stdio.h>
+#include <stdint.h>
 #include <ncurses.h>
 
 // So, VSCode intellisense is refusing to recognize ncurses functions from either the shared

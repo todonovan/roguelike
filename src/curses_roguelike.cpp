@@ -119,8 +119,9 @@ void init_game_state(GameState *state)
 int main(int argc, char *argv[])
 {
     init_ncurses();
-    GameState *game_state = (GameState *)malloc(sizeof(GameState));
-    init_game_state(game_state);
+    GameState game_state = {};
+    init_game_state(&game_state);
+
     
 
 
