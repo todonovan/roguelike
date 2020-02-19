@@ -1,12 +1,8 @@
 #pragma once
 
 #include "cr_common.h"
-
-typedef enum
-{
-    Empty,
-    Wall,
-} TileType;
+#include "cr_glyph.h"
+#include "map.fwd.h"
 
 struct Tile
 {
@@ -21,4 +17,5 @@ struct Map
     int height;
 };
 
-CRResultCode init_map(Map *map);
+Map new_map(int h, int w);
+void kill_map(Map *map);

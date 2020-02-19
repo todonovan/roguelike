@@ -14,7 +14,8 @@
 typedef enum
 {
     SUCCESS = 0,
-    ERR_FATAL = -1,
+    ERR_FATAL,
+    ERR_RECOVERABLE,
 } CRResultCode;
 
 // This nifty macro will print out the message you give it along with file name and line info.

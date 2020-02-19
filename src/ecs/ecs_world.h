@@ -1,20 +1,20 @@
 #pragma once
 
-#include "../cr_common.h"
-#include "ecs_component.h"
-
-typedef unsigned long long ulonger;
-#define Entity ulonger
-
-#define MAX_ENTITIES 2000
+#include "ecs_world.fwd.h"
+#include "ecs_component.fwd.h"
+#include "../cr_glyph.h"
 
 struct ECSWorld
 {
-    Entity entities[MAX_ENTITIES];
-    Position positions[MAX_ENTITIES];
-    Velocity velocities[MAX_ENTITIES];
-    Renderable renderables[MAX_ENTITIES];
+    Entity *entities;
+    bool *is_free;
+    Position *positions;
+    Velocity *velocities;
+    Renderable *renderables;
+    Monster *monsters;
 };
 
 Entity create_entity(ECSWorld *world);
-void init_world(ECSWorld *world);
+void kill_entity(ECSWorld *world, Entity entity);
+ECSWorld * new_world();
+void kill_world(ECSWorld *world);

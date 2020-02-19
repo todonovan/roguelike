@@ -1,5 +1,6 @@
 #include "cr_common.h"
 #include "cr_color.h"
+#include "cr_glyph.h"
 
 CRResultCode cr_init_colors()
 {
@@ -88,6 +89,7 @@ CRResultCode cr_init_colors()
     init_extended_pair(CRColorPair::VIOLET_ON_RED, CRColor::VIOLET, CRColor::RED);
     init_extended_pair(CRColorPair::BLACK_ON_RED, CRColor::BLACK, CRColor::RED);
 
+    bkgd(COLOR_PAIR(default_color_pair));
     return CRResultCode::SUCCESS;
 }
 
@@ -96,17 +98,18 @@ void cr_end_color()
 {
     // Restore default color settings.
     // This only works if you don't evict ncurses' default color values!
-    attron(COLOR_PAIR(0));
+    attrset(COLOR_PAIR(0));
+    bkgd(COLOR_PAIR(0));
 }
 
 // This function is ugly, but I'm going with the first thing that comes to mind for now
-CRColorPair cr_color_pair_from_glyph(CRGlyph glyph)
+CRColorPair cr_color_pair_from_colors(CRColor fg, CRColor bg)
 {
-    switch (glyph.bg)
+    switch (bg)
     {
         case CRColor::BLACK:
         {
-            switch (glyph.fg)
+            switch (fg)
             {
                 case CRColor::WHITE:
                     return CRColorPair::WHITE_ON_BLACK;
@@ -153,7 +156,7 @@ CRColorPair cr_color_pair_from_glyph(CRGlyph glyph)
         }
         case CRColor::BLUEBERRY:
         {
-            switch (glyph.fg)
+            switch (fg)
             {
                 case CRColor::WHITE:
                     return CRColorPair::WHITE_ON_BLUEBERRY;
@@ -170,7 +173,7 @@ CRColorPair cr_color_pair_from_glyph(CRGlyph glyph)
         }
         case CRColor::BLUE:
         {
-            switch (glyph.fg)
+            switch (fg)
             {
                 case CRColor::WHITE:
                     return CRColorPair::WHITE_ON_BLUE;

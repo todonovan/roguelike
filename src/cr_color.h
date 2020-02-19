@@ -1,10 +1,8 @@
 #pragma once
 
 #include "cr_common.h"
-#include "cr_glyph.h"
+#include "cr_glyph.fwd.h"
 
-// This absolutely dirty macro will make color pair lookups easier... eesh..
-#define MAKE_COLOR_PAIR(fg, bg) fg ## _ON_ ## bg
 
 // ncurses6 supports up to 256 colors; we obviously won't use that many (probably)
 // The enum starts at 16 to avoid overwriting the system defaults.
@@ -79,15 +77,10 @@ typedef enum
     BLACK_ON_RED,
 } CRColorPair;
 
-// In ncurses, values are represented by a short from 0 -> 1000
-struct CRColorTriple
-{
-    CRColor code;
-    int16_t red;
-    int16_t blue;
-    int16_t green;
-};
+const CRColor default_fg = CRColor::LIGHTER_GRAY;
+const CRColor default_bg = CRColor::BLACK;
+const CRColorPair default_color_pair = CRColorPair::LIGHTER_GRAY_ON_BLACK;
 
 CRResultCode cr_init_colors();
 void cr_end_color();
-CRColorPair cr_color_pair_from_glyph(CRGlyph glyph);
+CRColorPair cr_color_pair_from_colors(CRColor fg, CRColor bg);

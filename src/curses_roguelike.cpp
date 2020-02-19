@@ -23,29 +23,53 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <ncurses.h>
+#include <sys/ioctl.h>
+#include <stdio.h>
+#include <unistd.h>
+
+#include "cr_glyph.fwd.h"
+#include "map.fwd.h"
+#include "ecs/ecs_world.fwd.h"
+#include "ecs/ecs_component.fwd.h"
 
 #include "cr_common.h"
 #include "cr_color.h"
+#include "cr_glyph.h"
 #include "map.h"
-#include "ecs/ecs.h"
+#include "player.h"
+
+#include "ecs/ecs_world.h"
+#include "ecs/ecs_component.h"
+
+
+#define MAP_W 80
+#define MAP_H 50
 
 typedef enum
 {
     MOVEMENT,
     INVENTORY,
     LOOK,
+    START_MENU
 } GameMode;
 
 struct GameState
 {
     GameMode mode;
     Entity player;
-    ECSWorld world;
+    ECSWorld *world;
     Map map;
 };
 
+
 void init_ncurses()
 {
+    setenv("LINES", "40", 1);
+    setenv("COLUMNS", "40", 1);
+
+    winsize w;
+    ioctl(0, TIOCGWINSZ, &w);
+
     // General init calls
     initscr();   
     cbreak();
@@ -54,11 +78,28 @@ void init_ncurses()
     intrflush(stdscr, TRUE);
     keypad(stdscr, TRUE);
 
+    printw("Lines is %s, Cols is %s\n", getenv("LINES"), getenv("COLUMNS"));
+/*     if (ERR == resizeterm(40, 50))
+    {
+
+        CR_ERROR("Resizing didn't work\n");
+        getch();
+    }; */
+
     if (cr_init_colors() != CRResultCode::SUCCESS)
     {
         endwin();
         exit(1);
     }
+
+    // Set default color for terminal; the last param says 'use extended colors'
+    color_set(COLOR_PAIR(default_color_pair), (void *)&default_color_pair);
+}
+
+void end_game(GameState *state)
+{
+    kill_map(&state->map);
+    kill_world(state->world);
 }
 
 void end_ncurses()
@@ -69,7 +110,10 @@ void end_ncurses()
 
 void init_game_state(GameState *state)
 {
-
+    state->world = new_world();
+    state->map = new_map(MAP_H, MAP_W);
+    state->mode = GameMode::START_MENU;
+    state->player = create_player(state->world);
 }
 
 int main(int argc, char *argv[])
@@ -78,8 +122,16 @@ int main(int argc, char *argv[])
     GameState *game_state = (GameState *)malloc(sizeof(GameState));
     init_game_state(game_state);
     
+
+
+    Renderable *player_renderable = get_renderable(game_state->world, game_state->player);
+    attron(COLOR_PAIR(player_renderable->glyph.color_pair));
+    mvaddch(2, 7, player_renderable->glyph.sigil);
+    attroff(COLOR_PAIR(player_renderable->glyph.color_pair));
+    
     getch();
     end_ncurses();
+    end_game(game_state);
 
     return 0;
 }
